@@ -17,6 +17,30 @@ eureka:
     service-url:
       defaultZone: http://localhost:9999/eureka
 
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventory: # Replace with your desired Circuit Breaker name
+        registerHealthIndicator: true
+        event-consumer-buffer-size: 10
+        sliding-window-type: count_based
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
 logging:
   level:
     org:
