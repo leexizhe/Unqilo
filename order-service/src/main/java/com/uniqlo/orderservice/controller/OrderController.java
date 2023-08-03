@@ -3,6 +3,8 @@ package com.uniqlo.orderservice.controller;
 import com.uniqlo.orderservice.dto.OrderRequest;
 import com.uniqlo.orderservice.service.OrderService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import java.util.concurrent.CompletableFuture;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,13 +21,14 @@ public class OrderController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
-    public String placeOrder(@RequestBody OrderRequest orderRequest) {
-        orderService.placeOrder(orderRequest);
-        return "Order Placed Successfully";
+    @TimeLimiter(name = "inventory")
+    public CompletableFuture<String> placeOrder(@RequestBody OrderRequest orderRequest) {
+        return CompletableFuture.supplyAsync(() -> orderService.placeOrder(orderRequest));
     }
 
-    public String fallbackMethod(Throwable throwable) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public CompletableFuture<String> fallbackMethod(Throwable throwable) {
         log.debug("Inventory Service is down!", throwable);
-        return "Try again later";
+        return CompletableFuture.supplyAsync(() -> "Try again later");
     }
 }

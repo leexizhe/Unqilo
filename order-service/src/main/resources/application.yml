@@ -29,8 +29,7 @@ management:
     health:
       show-details: always
 
-resilience4j:
-  circuitbreaker:
+resilience4j.circuitbreaker:
     instances:
       inventory: # Replace with your desired Circuit Breaker name
         registerHealthIndicator: true
@@ -40,6 +39,11 @@ resilience4j:
         failureRateThreshold: 50
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
+resilience4j.timelimiter:
+    instances:
+      inventory:
+        timeout-duration: 3000
+
 
 logging:
   level:

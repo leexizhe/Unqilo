@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +29,8 @@ public class OrderServiceImpl implements OrderService {
 
     private WebClient.Builder webClientBuilder;
 
-    public void placeOrder(OrderRequest orderRequest) {
+
+    public String placeOrder(OrderRequest orderRequest) {
         List<OrderLineItems> orderLineItemsList = orderRequest.getOrderLinesItemsDtoList().stream()
                 .map(this::mapFromDto)
                 .collect(Collectors.toList());
@@ -58,6 +62,7 @@ public class OrderServiceImpl implements OrderService {
             log.info("Order Number : {}", order.getOrderNumber());
             orderRepository.save(order);
             log.info("Order is saved!");
+            return "Order Placed Successfully!";
         } else {
             throw new IllegalArgumentException("Product is not in stock, try again tomorrow!");
         }
