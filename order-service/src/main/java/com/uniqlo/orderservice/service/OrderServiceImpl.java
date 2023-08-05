@@ -21,12 +21,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 @AllArgsConstructor
 @Slf4j
 public class OrderServiceImpl implements OrderService {
-
     private OrderRepository orderRepository;
-
     private WebClient.Builder webClientBuilder;
 
-    public void placeOrder(OrderRequest orderRequest) {
+    public String placeOrder(OrderRequest orderRequest) {
         List<OrderLineItems> orderLineItemsList = orderRequest.getOrderLinesItemsDtoList().stream()
                 .map(this::mapFromDto)
                 .collect(Collectors.toList());
@@ -58,6 +56,7 @@ public class OrderServiceImpl implements OrderService {
             log.info("Order Number : {}", order.getOrderNumber());
             orderRepository.save(order);
             log.info("Order is saved!");
+            return "Order Placed Successfully!";
         } else {
             throw new IllegalArgumentException("Product is not in stock, try again tomorrow!");
         }
