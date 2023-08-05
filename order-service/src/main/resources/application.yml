@@ -42,8 +42,8 @@ resilience4j.circuitbreaker:
 resilience4j.timelimiter:
     instances:
       inventory:
-        timeout-duration: 3000
-
+        timeout-duration: 3s
+        cancel-running-future: true
 
 logging:
   level:

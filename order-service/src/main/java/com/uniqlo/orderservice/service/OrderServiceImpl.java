@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
-
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,11 +21,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @AllArgsConstructor
 @Slf4j
 public class OrderServiceImpl implements OrderService {
-
     private OrderRepository orderRepository;
-
     private WebClient.Builder webClientBuilder;
-
 
     public String placeOrder(OrderRequest orderRequest) {
         List<OrderLineItems> orderLineItemsList = orderRequest.getOrderLinesItemsDtoList().stream()
