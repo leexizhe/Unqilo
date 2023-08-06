@@ -29,9 +29,10 @@ management:
     health:
       show-details: always
 
-resilience4j.circuitbreaker:
+resilience4j:
+  circuitbreaker:
     instances:
-      inventory: # Replace with your desired Circuit Breaker name
+      order: # Replace with your desired Circuit Breaker name
         registerHealthIndicator: true
         event-consumer-buffer-size: 10
         sliding-window-type: count_based
@@ -39,11 +40,6 @@ resilience4j.circuitbreaker:
         failureRateThreshold: 50
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
-resilience4j.timelimiter:
-    instances:
-      inventory:
-        timeout-duration: 3s
-        cancel-running-future: true
 
 logging:
   level:
