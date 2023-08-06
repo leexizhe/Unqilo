@@ -3,8 +3,6 @@ package com.uniqlo.orderservice.controller;
 import com.uniqlo.orderservice.dto.OrderRequest;
 import com.uniqlo.orderservice.service.OrderService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
-import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import java.util.concurrent.CompletableFuture;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +19,7 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
-    @TimeLimiter(name = "inventory", fallbackMethod = "fallbackMethod")
+    @CircuitBreaker(name = "order", fallbackMethod = "fallbackMethod")
     public CompletableFuture<String> placeOrder(@RequestBody OrderRequest orderRequest) {
         log.info("Placing Order");
         return CompletableFuture.supplyAsync(() -> orderService.placeOrder(orderRequest));
