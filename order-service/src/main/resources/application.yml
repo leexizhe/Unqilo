@@ -11,6 +11,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1.0
 
 eureka:
   client:
@@ -19,7 +24,7 @@ eureka:
 
 logging:
   level:
-    org:
-      hibernate:
-        type: TRACE
-        SQL: DEBUG
+    org.hibernate.type: TRACE
+    org.hibernate.SQL: DEBUG
+    org.springframework.cloud.sleuth: DEBUG # Set the logging level for Sleuth
+    org.springframework.cloud.sleuth.instrument.web: DEBUG # Set the logging level for Sleuth's web instrumentation
