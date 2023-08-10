@@ -23,12 +23,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 @AllArgsConstructor
 @Slf4j
 public class OrderServiceImpl implements OrderService {
-
     private OrderRepository orderRepository;
     private WebClient.Builder webClientBuilder;
     private KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
-    public void placeOrder(OrderRequest orderRequest) {
+    public String placeOrder(OrderRequest orderRequest) {
         List<OrderLineItems> orderLineItemsList = orderRequest.getOrderLinesItemsDtoList().stream()
                 .map(this::mapFromDto)
                 .collect(Collectors.toList());

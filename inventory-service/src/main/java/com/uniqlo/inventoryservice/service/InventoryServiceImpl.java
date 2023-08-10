@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Slf4j
 public class InventoryServiceImpl implements InventoryService {
-
     private InventoryRepository inventoryRepository;
 
     public List<InventoryResponse> isInstock(List<String> skuCode) {
