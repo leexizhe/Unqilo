@@ -1,9 +1,9 @@
 server:
-  port: 1010
+  port: 1040
 
 spring:
   application:
-    name: order-service
+    name: notification-service
   datasource:
     username: root
     url: jdbc:mysql://localhost:3306/uniqlo?useSSL=false
@@ -20,11 +20,12 @@ spring:
     bootstrap-servers: http://localhost:9092
     template:
       default-topic: notificationTopic
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: notificationId
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.type.mapping: event:com.uniqlo.orderservice.event.OrderPlacedEvent
+        spring.json.type.mapping: event:com.uniqlo.notificationservice.event.OrderPlacedEvent
 
 
 eureka:
