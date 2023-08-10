@@ -3,6 +3,7 @@ package com.uniqlo.orderservice.service;
 import com.uniqlo.orderservice.dto.InventoryResponse;
 import com.uniqlo.orderservice.dto.OrderLinesItemsDto;
 import com.uniqlo.orderservice.dto.OrderRequest;
+import com.uniqlo.orderservice.event.OrderPlacedEvent;
 import com.uniqlo.orderservice.model.Order;
 import com.uniqlo.orderservice.model.OrderLineItems;
 import com.uniqlo.orderservice.repository.OrderRepository;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -23,6 +25,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private WebClient.Builder webClientBuilder;
+    private KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     public String placeOrder(OrderRequest orderRequest) {
         List<OrderLineItems> orderLineItemsList = orderRequest.getOrderLinesItemsDtoList().stream()
@@ -56,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
             log.info("Order Number : {}", order.getOrderNumber());
             orderRepository.save(order);
             log.info("Order is saved!");
-            return "Order Placed Successfully!";
+            kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
         } else {
             throw new IllegalArgumentException("Product is not in stock, try again tomorrow!");
         }

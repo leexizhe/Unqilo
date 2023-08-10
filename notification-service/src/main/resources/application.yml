@@ -1,0 +1,41 @@
+server:
+  port: 1040
+
+spring:
+  application:
+    name: notification-service
+  datasource:
+    username: root
+    url: jdbc:mysql://localhost:3306/uniqlo?useSSL=false
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1.0
+  kafka:
+    bootstrap-servers: http://localhost:9092
+    template:
+      default-topic: notificationTopic
+    consumer:
+      group-id: notificationId
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.type.mapping: event:com.uniqlo.notificationservice.event.OrderPlacedEvent
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9999/eureka
+
+logging:
+  level:
+    org.hibernate.type: TRACE
+    org.hibernate.SQL: DEBUG
+    org.springframework.cloud.sleuth: DEBUG # Set the logging level for Sleuth
+    org.springframework.cloud.sleuth.instrument.web: DEBUG # Set the logging level for Sleuth's web instrumentation
