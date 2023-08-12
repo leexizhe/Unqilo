@@ -1,6 +1,16 @@
 version: '3.7'
 services:
   ## MySQL Docker Compose Config
+  mysql:
+    image: mysql:8.0.31
+    container_name: mysql
+    environment:
+      MYSQL_DB: uniqlo
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ./mysql-db:/data/mysql
+    ports:
+      - "3307:3307"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
