@@ -1,16 +1,18 @@
 version: '3.7'
 services:
-  ## MySQL Docker Compose Config
   mysql:
     image: mysql:8.0.31
     container_name: mysql
     environment:
-      MYSQL_DB: uniqlo
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: uniqlo
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "3307:3306" # Map host port 3307 to container port 3306
     volumes:
       - ./mysql-db:/data/mysql
-    ports:
-      - "3307:3307"
+  # mysql -h 127.0.0.1 -P 3307 -u myuser -pmypassword
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
@@ -37,9 +39,43 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
-  ## Zipkin
   zipkin:
     image: openzipkin/zipkin
     container_name: zipkin
     ports:
       - "9411:9411"
+
+  discovery-server:
+    image: leexizhe17/discovery-server:latest
+    container_name: discovery-server
+    pull_policy: always
+    ports:
+      - "9999:9999"
+    depends_on:
+      - zipkin
+
+#  api-gateway:
+#    image: leexizhe17/api-gateway:latest
+#    container_name: api-gateway
+#    pull_policy: always
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - zipkin
+#      - discovery-server
+#
+#  product-service:
+#    container_name: product-service
+#    image: leexizhe17/product-service:latest
+#    pull_policy: always
+#    ports:
+#      - "1000:1000"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3307/uniqlo?useSSL=false
+#      - SPRING_DATASOURCE_USERNAME=myuser
+#      - SPRING_DATASOURCE_PASSWORD=mypassword
+#    depends_on:
+#      - mysql
+#      - discovery-server
+#      - api-gateway
