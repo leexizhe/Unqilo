@@ -1,18 +1,18 @@
 server:
-  port: 1000
+  port: 1020
 
 spring:
   application:
-    name: product-service
+    name: inventory-service
   datasource:
     username: root
-    url: jdbc:mysql://mysqldb:3306/uniqlo?allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/uniqlo?allowPublicKeyRetrieval=true&useSSL=false
     password: password
   jpa:
     hibernate:
       ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
   zipkin:
-    base-url: http://zipkin:9411
+    base-url: http://localhost:9411
   sleuth:
     sampler:
       probability: 1.0
@@ -20,7 +20,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://discovery-server:9999/eureka
+      defaultZone: http://localhost:9999/eureka
 
 logging:
   level:
