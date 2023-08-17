@@ -39,5 +39,3 @@ logging:
     org.springframework.cloud.sleuth.instrument.web: DEBUG # Set the logging level for Sleuth's web instrumentation
     org.springframework.cloud.gateway: TRACE
     org.springframework.cloud.route.RouteDefinitionLocator: INFO
-
-
