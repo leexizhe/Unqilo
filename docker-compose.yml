@@ -55,8 +55,6 @@ services:
       - "9999:9999"
     depends_on:
       - zipkin
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
 
   api-gateway:
     image: leexizhe17/api-gateway:latest
