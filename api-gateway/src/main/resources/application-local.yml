@@ -14,14 +14,14 @@ spring:
           uri: lb://order-service
           predicates: Path=/api/order
         - id: discovery-server
-          uri: http://discovery-server:9999
+          uri: http://localhost:9999
           predicates: Path=/eureka
           filters: SetPath=/
         - id: discovery-server-static
-          uri: http://discovery-server:9999
+          uri: http://localhost:9999
           predicates: Path=/eureka/**
   zipkin:
-    base-url: http://zipkin:9411
+    base-url: http://localhost:9411
   sleuth:
     sampler:
       probability: 1.0
@@ -29,7 +29,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://discovery-server:9999/eureka
+      defaultZone: http://localhost:9999/eureka
 
 logging:
   level:

@@ -60,6 +60,7 @@ public class OrderServiceImpl implements OrderService {
             orderRepository.save(order);
             log.info("Order is saved!");
             kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
+            return "Order Placed Successfully!";
         } else {
             throw new IllegalArgumentException("Product is not in stock, try again tomorrow!");
         }

@@ -2,11 +2,11 @@ package com.uniqlo.orderservice.controller;
 
 import com.uniqlo.orderservice.dto.OrderRequest;
 import com.uniqlo.orderservice.service.OrderService;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.concurrent.CompletableFuture;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
